@@ -12,10 +12,10 @@ import scrapy_spider_wranglers.utils.wrangler_utils as wu
 
 
 class SpiderWrangler:
-    """Provides an interface for the dynamic creation and running of Scrapy Spiders"""
+    """Provides an API for the dynamic creation and sequential running of Scrapy Spiders"""
     _settings = get_project_settings()
 
-    def __init__(self, spidercls = None, custom_settings: dict = None):
+    def __init__(self, spidercls = None, custom_settings: dict = None, settings_ow: bool = False):
         # Set up crochet so Twisted's reactor doesn't explode
         crochet.setup()
 
@@ -26,9 +26,10 @@ class SpiderWrangler:
         # public
         self.spidercls = spidercls
         self.custom_settings = custom_settings
+        self.settings_ow = settings_ow
 
     def construct_temp_spider(self) -> type:
-        temp_settings = wu.construct_custom_settings(self.spidercls, self.custom_settings)
+        temp_settings = wu.construct_custom_settings(self.spidercls, self.custom_settings, self.settings_ow)
         class_vars = {
             'custom_settings': temp_settings
         }
