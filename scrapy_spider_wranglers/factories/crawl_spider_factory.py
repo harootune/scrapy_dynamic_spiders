@@ -18,6 +18,7 @@ class CrawlSpiderClsFactory(SpiderClsFactory):
         # parent contructor #
         super().__init__(custom_settings=custom_settings, settings_ow=settings_ow)
 
+        # attributes#
         # public
         self.extractor_configs = extractor_configs if extractor_configs else []
         self.rule_configs = rule_configs if rule_configs else []
@@ -60,7 +61,7 @@ class CrawlSpiderClsFactory(SpiderClsFactory):
         :return: A Spider-derived class object
         """
         if not spidercls:
-            raise TypeError('Cannot construct a Spider without a template class.')
+            raise AttributeError('Cannot construct a Spider without a template class.')
 
         settings = self._construct_custom_settings(spidercls)
         rules = self._construct_rule_list(spidercls)

@@ -7,6 +7,7 @@ class SpiderClsFactory:
     and Sitemap generic spiders"""
 
     def __init__(self, custom_settings: dict = None, settings_ow: bool = False):
+        # attributes #
         # public
         self.custom_settings = custom_settings if custom_settings else {}
         self.settings_ow = settings_ow
