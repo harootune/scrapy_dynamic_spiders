@@ -1,10 +1,13 @@
+# stdlib
+import copy
+
 # third party
 from scrapy.spiders import Rule
 from scrapy.linkextractors import LinkExtractor
 
 
-def construct_rule(extractor_config: dict, rule_template: dict) -> Rule:
-    return Rule(LinkExtractor(**extractor_config), **rule_template)
+def construct_rule(extractor_config: dict, rule_config: dict) -> Rule:
+    return Rule(LinkExtractor(**extractor_config), **rule_config)
 
 
 def construct_custom_settings(spidercls, custom_settings: dict, settings_ow: bool) -> dict:
@@ -14,7 +17,7 @@ def construct_custom_settings(spidercls, custom_settings: dict, settings_ow: boo
         settings = {}
     else:
         try:
-            settings = spidercls.custom_settings.deepcopy()
+            settings = copy.deepcopy(spidercls.custom_settings)
         except AttributeError:
             settings = {}
 
