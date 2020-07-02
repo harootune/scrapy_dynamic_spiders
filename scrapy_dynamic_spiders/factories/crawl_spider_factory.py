@@ -6,8 +6,8 @@ from typing import List
 from scrapy.spiders import Rule
 
 # local
-import scrapy_spider_wranglers.utils.factory_utils as f_utils
-from scrapy_spider_wranglers.factories import SpiderClsFactory
+import scrapy_dynamic_spiders.utils.factory_utils as f_utils
+from scrapy_dynamic_spiders.factories import SpiderClsFactory
 
 
 class CrawlSpiderClsFactory(SpiderClsFactory):

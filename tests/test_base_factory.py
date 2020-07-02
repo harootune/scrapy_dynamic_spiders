@@ -3,7 +3,7 @@ import unittest
 
 # local
 from tests.testing_spiders import TestSpider
-from scrapy_spider_wranglers.factories import SpiderClsFactory
+from scrapy_dynamic_spiders.factories import SpiderClsFactory
 
 
 class TestBaseFactory(unittest.TestCase):
