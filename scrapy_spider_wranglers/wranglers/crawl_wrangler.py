@@ -1,54 +1,49 @@
 # stdlib
-import warnings
-import copy
 from typing import List
 
 # local
 from .base_wrangler import SpiderWrangler
-import scrapy_spider_wranglers.utils.wrangler_utils as wu
+from scrapy_spider_wranglers.factories import CrawlSpiderClsFactory
 
 
 class CrawlSpiderWrangler(SpiderWrangler):
-    """Provides an API for the dynamic creation and sequential running of Scrapy CrawlSpiders"""
-    def __init__(self, spidercls = None, custom_settings: dict = None, settings_ow: bool = False, reactor: bool = True,
-                 extractor_configs: List[dict] = None, rule_configs: List[dict] = None, rule_ow: bool = True):
+    """Provides an API for the dynamic creation and/or sequential running of Scrapy CrawlSpiders"""
+    def __init__(self, spidercls = None, gen_spiders: bool = True,
+                 custom_settings: dict = None, settings_ow: bool = False,
+                 extractor_configs: List[dict] = None, rule_configs: List[dict] = None, rule_ow: bool = False):
 
-        super().__init__(spidercls=spidercls, custom_settings=custom_settings, settings_ow=settings_ow, reactor=reactor)
+        # parent constructor #
+        super().__init__(spidercls=spidercls, gen_spiders=gen_spiders)
 
-        # subclass attributes #
-        self.extractor_configs = extractor_configs if extractor_configs else {}
-        self.rule_configs = rule_configs if rule_configs else {}
-        self.rule_ow = rule_ow
+        # attributes #
+        # private
+        self._clsfactory = CrawlSpiderClsFactory(custom_settings=custom_settings, settings_ow=settings_ow,
+                                                 extractor_configs=extractor_configs, rule_configs=rule_configs, rule_ow=rule_ow)
 
-    def construct_temp_spider(self) -> type:
-        # construct settings
-        temp_settings = wu.construct_custom_settings(self.spidercls, self.custom_settings, self.settings_ow)
+    @property
+    def extractor_configs(self):
+        return self._clsfactory.extractor_configs
 
-        # construct rules
-        if self.rule_ow:
-            temp_rules = []
-        else:
-            try:
-                temp_rules = copy.deepcopy(self.spidercls.rules)
-            except AttributeError:
-                temp_rules = []
+    @extractor_configs.setter
+    def extractor_configs(self, value):
+        self._clsfactory.extractor_configs = value
 
-        for i in range(len(self.rule_configs)):
-            # handles case where there are fewer extractor configs than rule configs
-            try:
-                temp_rules.append(wu.construct_rule(self.extractor_configs[i], self.rule_configs[i]))
-            except IndexError as e:
-                warnings.warn(f'CrawlSpiderWrangler wrangling {self.spidercls.__name__}: fewer extractor configs than'
-                              f'rule configs, using last available.')
-                temp_rules.append(wu.construct_rule(self.extractor_configs[-1], self.rule_configs[i]))
+    @property
+    def rule_configs(self):
+        return self._clsfactory.rule_configs
 
-        class_vars = {
-            'custom_settings': temp_settings,
-            'rules': temp_rules,
-        }
+    @rule_configs.setter
+    def rule_configs(self, value):
+        self._clsfactory.rule_configs = value
 
-        # construct temp class
-        return type('temp_spider', (self.spidercls,), class_vars)
+    @property
+    def rule_ow(self):
+        return self._clsfactory.rule_ow
+
+    @rule_ow.setter
+    def rule_ow(self, value):
+        self._clsfactory.rule_ow = value
+
 
 
 
