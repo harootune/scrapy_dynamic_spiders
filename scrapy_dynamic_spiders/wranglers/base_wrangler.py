@@ -6,23 +6,24 @@ from scrapy.crawler import CrawlerRunner
 
 class SpiderWrangler:
     """Provides an API for the dynamic creation and/or sequential running of Scrapy Spiders, including basic, XMLFeed,
-    CSVFeed, and Sitemap spiders."""
+    CSVFeed, Sitemap, and CrawlSpiders"""
 
-    def __init__(self, settings, spidercls = None, clsfactory = None, gen_spiders: bool = True, **kwargs):
+    def __init__(self, settings, spidercls = None, clsfactory = None, gen_spiders: bool = True):
         # setup crochet reactor thread if not already present#
         crochet.setup()
 
         # attributes #
         # private
         self._runner = CrawlerRunner(settings)
-        self._clsfactory = clsfactory(**kwargs) if clsfactory else None
 
         # public
+        self.clsfactory = clsfactory
         self.spidercls = spidercls
         self.gen_spiders = gen_spiders
 
     @crochet.wait_for(1800)
     def start_crawl(self, *args, **kwargs) -> Deferred:
+        """Wraps _start_crawl and provides the necessary decorator"""
         return self._start_crawl(*args, **kwargs)
 
     def _start_crawl(self, *args, **kwargs) -> Deferred:
@@ -39,12 +40,4 @@ class SpiderWrangler:
                 return self._runner.crawl(TempSpider, *args, **kwargs)
         else:
             return self._runner.crawl(self.spidercls, *args, **kwargs)
-
-    @property
-    def clsfactory(self):
-        return self._clsfactory
-
-    @clsfactory.setter
-    def clsfactory(self, clsfactory, **kwargs):
-        self._clsfactory = clsfactory(**kwargs)
 

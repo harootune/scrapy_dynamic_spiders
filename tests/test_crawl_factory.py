@@ -21,13 +21,16 @@ class TestCrawlFactory(unittest.TestCase):
 
     def test_rule_concat(self):
         test_class = self.factory.construct_spider(TestCrawlSpider)
+
         self.assertEqual(len(test_class.rules), 3)
+        self.assertEqual(test_class.rules[-1].callback, None)
 
     def test_rule_ow(self):
         self.factory.rule_ow = True
-
         test_class = self.factory.construct_spider(TestCrawlSpider)
+
         self.assertEqual(len(test_class.rules), 2)
+        self.assertEqual(test_class.rules[-1].callback, None)
 
 
 if __name__ == '__main__':

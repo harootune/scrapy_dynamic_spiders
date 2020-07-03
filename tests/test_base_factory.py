@@ -16,13 +16,18 @@ class TestBaseFactory(unittest.TestCase):
 
     def test_settings_concat(self):
         test_class = self.factory.construct_spider(TestSpider)
+
         self.assertEqual(len(test_class.custom_settings.keys()), 3)
+        self.assertEqual(test_class.custom_settings['test_setting_3'], 3)
+        self.assertEqual(test_class.custom_settings['test_setting_1'], 1)
 
     def test_settings_ow(self):
         self.factory.settings_ow = True
-
         test_class = self.factory.construct_spider(TestSpider)
+
         self.assertEqual(len(test_class.custom_settings.keys()), 1)
+        self.assertEqual(test_class.custom_settings['test_setting_3'], 3)
+        self.assertNotIn('test_setting_1', test_class.custom_settings)
 
 
 if __name__ == '__main__':
