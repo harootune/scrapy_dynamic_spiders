@@ -15,7 +15,7 @@ class CrawlSpiderClsFactory(SpiderClsFactory):
     def __init__(self, custom_settings: dict = None, settings_ow: bool = False,
                  extractor_configs: List[dict] = None, rule_configs: List[dict] = None, rule_ow: bool = False):
 
-        # parent contructor #
+        # parent constructor #
         super().__init__(custom_settings=custom_settings, settings_ow=settings_ow)
 
         # attributes#
@@ -36,9 +36,8 @@ class CrawlSpiderClsFactory(SpiderClsFactory):
         if self.rule_ow:
             rules = []
         else:
-            try:
-                rules = copy.deepcopy(spidercls.rules)
-            except AttributeError:
+            rules = copy.deepcopy(spidercls.rules)
+            if not rules:
                 rules = []
 
         for i in range(len(self.rule_configs)):
@@ -63,10 +62,12 @@ class CrawlSpiderClsFactory(SpiderClsFactory):
         if not spidercls:
             raise AttributeError('Cannot construct a Spider without a template class.')
 
+        self._count += 1
+
         settings = self._construct_custom_settings(spidercls)
         rules = self._construct_rule_list(spidercls)
         class_vars = {
             'custom_settings': settings,
             'rules': rules
         }
-        return type('temp_spider', (spidercls,), class_vars)
+        return type(f'{spidercls.__name__}-{self._count}', (spidercls,), class_vars)

@@ -8,6 +8,9 @@ class SpiderClsFactory:
 
     def __init__(self, custom_settings: dict = None, settings_ow: bool = False):
         # attributes #
+        # private
+        self._count = 0
+
         # public
         self.custom_settings = custom_settings if custom_settings else {}
         self.settings_ow = settings_ow
@@ -22,9 +25,8 @@ class SpiderClsFactory:
         if self.settings_ow:
             settings = {}
         else:
-            try:
-                settings = copy.deepcopy(spidercls.custom_settings)
-            except AttributeError:
+            settings = copy.deepcopy(spidercls.custom_settings)
+            if not settings:
                 settings = {}
 
         for key, value in self.custom_settings.items():
@@ -41,8 +43,10 @@ class SpiderClsFactory:
         if not spidercls:
             raise TypeError('Cannot construct a Spider without a template class.')
 
+        self._count += 1
+
         settings = self._construct_custom_settings(spidercls)
         class_vars = {
             'custom_settings': settings
         }
-        return type('temp_spider', (spidercls,), class_vars)
+        return type(f'{spidercls.__name__}-{self._count}', (spidercls,), class_vars)
