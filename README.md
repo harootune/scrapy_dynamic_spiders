@@ -53,7 +53,7 @@ existing ``custom_settings`` and the Factory's current attributes.
 
 <br>  
 
-####CrawlSpiderClsFactory
+#### CrawlSpiderClsFactory
 Inherits from SpiderClsFactory.
 ```python3
 class scrapy_dynamic_spiders.factories.CrawlSpiderClsFactory(custom_settings=None, settings_ow=False,
@@ -82,7 +82,7 @@ template spidercls and the Factory's current attributes.
 
 <br>
 
-####SpiderWrangler
+#### SpiderWrangler
 ```python3
 class scrapy_dynamic_spiders.wranglers.SpiderWrangler(settings, spidercls = None, clsfactory = None, gen_spiders = True)
 ```
@@ -127,7 +127,7 @@ return by this function, or a mutation of it, when overriding ``start_crawl``.
 
 <br>
 
-###Tests
+### Tests
 Run tests like so.
 ```bash
 python -m unittests tests
@@ -135,12 +135,12 @@ python -m unittests tests
 
 <br>
 
-###Known Issues
+### Known Issues
 - Running tests results in unclosed sockets. Currently investigating.
 
 <br>
 
-###Changelog
+### Changelog
 
 **v1.0.0a1**
 - Initial alpha release
