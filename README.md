@@ -67,8 +67,8 @@ index position in ``rule_configs``. If there are fewer  ``extractor_configs`` th
 
 *Attributes*
 
-``extractor_configs`` - a list of dictionaries. Each dictionary should contain kwargs for a LinkExtractor object.
-``rule_configs`` - a list of dictionaries. Each dictionary should contain kwargs for a Rule object.
+``extractor_configs`` - a list of dictionaries. Each dictionary should contain kwargs for a LinkExtractor object.  
+``rule_configs`` - a list of dictionaries. Each dictionary should contain kwargs for a Rule object.  
 ``rule_ow`` - if ``True``, any exiting rules are replaced by the dynamically generated rules. If ``false``, new rules
 are appended to a copy of the existing rule list.
 
